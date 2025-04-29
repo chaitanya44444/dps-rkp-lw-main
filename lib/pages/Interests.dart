@@ -187,36 +187,6 @@ class _InterestsState extends State<Interests> {
                   onPressed: () => _submit(_username, _userInterests),
                   child: Text('Submit'),
                 ),
-                SizedBox(height: 100,),
-                Container(
-                  height: 50,
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/landingscreen'),
-                        child: Icon(Icons.home, color: Colors.indigo),
-                      ),
-
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/google-trends-display'),
-                        child: Text('Trends', style: TextStyle(fontSize: 16)),
-                      ),
-
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/content-gen'),
-                        child: Text('Content-Gen', style: TextStyle(fontSize: 16)),
-                      ),
-
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/resources'),
-                        child: Text('Resources', style: TextStyle(fontSize: 16)),
-                      ),
-                    ],
-                  ),
-                )
-              
               ],
             )
 

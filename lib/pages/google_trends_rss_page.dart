@@ -78,7 +78,7 @@ class _GoogleTrendsRssPageState extends State<GoogleTrendsRssPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Google Trends (RSS Feed)'),
+        title: const Text('Popular Trends'),
         backgroundColor: Colors.blueAccent,
       ),
       body: trendsProvider.isLoading
