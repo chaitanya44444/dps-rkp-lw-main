@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lw/models/Rss.dart';
 import '../pages/google_trends_rss_page.dart';
 
 class TrendsProvider with ChangeNotifier {
   List<RssItem> _trends = [];
-  final List<RssItem> _likedTrends = [];
+  List<RssItem> _likedTrends = [];
   bool _isLoading = false;
   String? _error;
 
@@ -68,6 +69,14 @@ class TrendsProvider with ChangeNotifier {
       _likedTrends.add(trend);
       notifyListeners();
     }
+  }
+
+  List getLikedTrends() {
+    return _likedTrends.map((trend) => trend.title).toList();
+  }
+
+  List getTrends() {
+    return _trends.map((trend) => trend.title).toList();
   }
 
   void unlikeTrend(RssItem trend) {

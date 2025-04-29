@@ -1,36 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lw/models/Rss.dart';
 import 'package:provider/provider.dart';
 import '../services/trends_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 import 'package:intl/intl.dart';
 
-class RssItem {
-  final String title;
-  final String? link;
-  final String? description;
-  final DateTime? pubDate;
-  final String? approxTraffic;
-
-  RssItem({
-    required this.title,
-    this.link,
-    this.description,
-    this.pubDate,
-    this.approxTraffic,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RssItem &&
-          runtimeType == other.runtimeType &&
-          title == other.title &&
-          link == other.link;
-
-  @override
-  int get hashCode => title.hashCode ^ link.hashCode;
-}
 
 class RssFeedService {
   final String rssFeedUrl = 'https://trends.google.com/trending/rss?geo=IN';
@@ -185,9 +160,6 @@ class _GoogleTrendsRssPageState extends State<GoogleTrendsRssPage> {
                                 ),
 
                               ],
-
-
-
                             ),
                           ),
 

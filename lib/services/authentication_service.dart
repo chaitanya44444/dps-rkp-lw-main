@@ -50,13 +50,13 @@ class AuthenticationService {
   Future<void> addUserToDB(String uid, String username, String email, DateTime timestamp, List<String> interests) async {
     userModel = UserModel(uid: uid, username: username, email: email, timestamp: timestamp, interests: interests);
 
-    await userRef.doc(uid).set(userModel.toMap(userModel));
+    await userRef.doc(uid).set(userModel.toJson());
   }
 
   Future<UserModel> getUserFromDB(String uid) async {
     final DocumentSnapshot doc = await userRef.doc(uid).get();
 
-    return UserModel.fromMap(doc.data() as Map<String, dynamic>);
+    return UserModel.fromJson(doc.data() as Map<String, dynamic>);
   }
 
   Future<void> signOut() async {

@@ -14,24 +14,22 @@ class UserModel {
       required this.timestamp,
       required this.interests});
 
-  Map<String, dynamic> toMap(UserModel user) {
-    var data = <String, dynamic>{};
+  UserModel.fromJson(Map<String, Object?> json)
+      : this(
+          uid: json["uid"] as String,
+          username: json["username"] as String,
+          email: json["email"] as String,
+          timestamp: (json["timestamp"] as Timestamp).toDate(),
+          interests: json["interests"] as List<String>
+        );
 
-    data["uid"] = user.uid;
-    data["username"] = user.username;
-    data["email"] = user.email;
-    data["timestamp"] = user.timestamp;
-    data["interests"] = user.interests;
-
-    return data;
+  Map<String, Object?> toJson() {
+    return {
+      'uid': uid,
+      'username': username,
+      'email': email,
+      'timestamp': timestamp,
+      'interests': interests
+    };
   }
-
-  UserModel.fromMap(Map<String, dynamic> mapData)
-    :this(
-    uid: mapData["uid"] as String,
-    username: mapData["username"] as String,
-    email: mapData["email"] as String,
-    timestamp: (mapData["timestamp"] as Timestamp).toDate(),
-    interests: mapData["interests"] as List<String>
-  );
 }

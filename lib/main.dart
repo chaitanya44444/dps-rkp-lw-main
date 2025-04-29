@@ -38,7 +38,7 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/landingscreen',
+      initialRoute: '/sign-up',
       routes: {
         '/log-in': (context) => LogIn(),
         '/google-trends-display': (context) => GoogleTrendsRssPage(),
