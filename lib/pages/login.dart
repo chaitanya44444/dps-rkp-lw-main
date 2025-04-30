@@ -50,7 +50,7 @@ class _LogInState extends State<LogIn> {
         : _showErrorSnack(logMessage);
 
     if (logMessage == "Signed In") {
-      Navigator.pushNamed(context, "/landingScreen");
+      Navigator.pushNamed(context, "/landingscreen");
       return;
     } else {
       setState(() {
