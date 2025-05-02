@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:lw/services/database_services.dart';
 import 'package:lw/services/trends_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class ContentGen extends StatefulWidget {
   const ContentGen({Key? key}) : super(key: key);
@@ -130,6 +131,11 @@ class _ContentGenState extends State<ContentGen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Clipboard.setData(ClipboardData(text: _output.length > 3 ? _output.toString() : "")),
+        tooltip: 'Copy',
+        child: Icon(Icons.copy),
       ),
     );
   }
