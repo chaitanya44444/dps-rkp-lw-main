@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lw/pages/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lw/firebase_options.dart';
@@ -35,18 +36,32 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'LiveWire',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.dark,
+        primaryColor: Colors.deepPurpleAccent,
+        scaffoldBackgroundColor: Colors.black,
+        highlightColor: Colors.purpleAccent,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.deepPurpleAccent,
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.purple[100],
+            fontSize: 30,
+          ),
+          toolbarHeight: 50,
+        ),
       ),
+      
       initialRoute: '/sign-up',
       routes: {
         '/log-in': (context) => LogIn(),
-        '/google-trends-display': (context) => GoogleTrendsRssPage(),
+        '/landingscreen/google-trends-display': (context) => GoogleTrendsRssPage(),
         '/sign-up': (context) => SignUp(),
         '/landingscreen': (context) => LandingScreen(),
         '/interests': (context) => Interests(),
-        '/content-gen': (context) => ContentGen(),
-        '/resources': (context) => Resourcescreen(),
+        '/landingscreen/content-gen': (context) => ContentGen(),
+        '/landingscreen/profile': (context) => Profile(),
+        '/landingscreen/resources': (context) => Resourcescreen(),
       },
       debugShowCheckedModeBanner: false,
     );

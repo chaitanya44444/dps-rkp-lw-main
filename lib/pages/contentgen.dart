@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:lw/models/Rss.dart';
 import 'package:provider/provider.dart';
 import 'package:lw/services/database_services.dart';
 import 'package:lw/services/trends_provider.dart';
-import 'package:lw/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ContentGen extends StatefulWidget {
@@ -46,8 +44,6 @@ class _ContentGenState extends State<ContentGen> {
     }
   }
 
-  List _likedTrends = [];
-
   @override
   void initState() {
     super.initState();
@@ -64,14 +60,14 @@ class _ContentGenState extends State<ContentGen> {
 
     String i = _promptController.text;
 
-    final userInterests = interests.isNotEmpty ? interests.join(', ') : 'your interests';
-    final likedTrends = lt.isNotEmpty ? lt.join(', ') : 'liked trends';
+    final userInterests = interests.isNotEmpty ? interests.join(', ') : "[Click 'Give Ideas' again if you have interests]";
+    final likedTrends = lt.isNotEmpty ? lt.join(', ') : "[Click 'Give Ideas' again if you have likedtrends]";
     final allTrends = at.isNotEmpty ? at.join(', ') : 'popular trends';
     final prompt = 'Based on the user\'s interests: [$userInterests], Popular Trends: [$allTrends] and liked trends: [$likedTrends], suggest a list of creative and high-performing content ideas for social media posts. Keep this in mind: [$i].';
 
     try {
       final response = await _model.generateContent([Content.text(prompt)]);
-      setState(() => _output = ("Your Interests: " + userInterests + "\nYour Liked Trends: " + likedTrends + "\nPopular Trends: " + allTrends + "\n\n") + response.text.toString() ?? 'No output');
+      setState(() => _output = ("Your Interests: " + userInterests + "\nYour Liked Trends: " + likedTrends + "\nPopular Trends: " + allTrends + "\n\n") + response.text.toString());
     } catch (e) {
       setState(() => _output = 'Error generating content: $e');
     } finally {
@@ -116,14 +112,22 @@ class _ContentGenState extends State<ContentGen> {
                 child: CircularProgressIndicator(),
               )
             else
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Text(
-                    _output,
-                    style: TextStyle(fontSize: 20),
-                  ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  _output,
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text(
+                'Content is AI-generated. Review for accuracy before use.',
+              style: TextStyle(fontSize: 14, color: Colors.white),
+              textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),

@@ -1,5 +1,3 @@
-import 'landingscreen.dart';
-import 'signup.dart';
 import 'package:lw/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +15,6 @@ class _LogInState extends State<LogIn> {
   bool _obscureText = true;
   String _email = "";
   String _password = "";
-  String _username = "";
   bool _isSubmitting = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -107,7 +104,6 @@ class _LogInState extends State<LogIn> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("Log In"),
-        backgroundColor: Colors.blue,
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),

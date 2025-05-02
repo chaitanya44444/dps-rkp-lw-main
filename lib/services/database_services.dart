@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lw/models/user.dart';
 
 // Firebase Firestore
@@ -19,6 +16,15 @@ class DatabaseService {
         snapshots.data()!,
       ),
     toFirestore: (user, _) => user.toJson());
+  }
+
+  Future<void> updateUserField(String uid, String field, dynamic value) async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({field: value});
+    } catch (e) {
+      print('Error updating user field: $e');
+      rethrow;
+    }
   }
 
   Stream<QuerySnapshot> getSnapshotStream({String docId = "", String subCollection = "", String orderOn = "", bool descending = false}) {

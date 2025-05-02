@@ -47,7 +47,7 @@ class AuthenticationService {
     }
   }
 
-  Future<void> addUserToDB(String uid, String username, String email, DateTime timestamp, List<String> interests) async {
+  Future<void> addUserToDB(String uid, String username, String email, DateTime timestamp, List interests) async {
     userModel = UserModel(uid: uid, username: username, email: email, timestamp: timestamp, interests: interests);
 
     await userRef.doc(uid).set(userModel.toJson());

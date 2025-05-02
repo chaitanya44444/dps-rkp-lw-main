@@ -75,6 +75,10 @@ class TrendsProvider with ChangeNotifier {
     return _likedTrends.map((trend) => trend.title).toList();
   }
 
+  List<RssItem> getLikedTrendsRss() {
+    return _likedTrends;
+  }
+
   List getTrends() {
     return _trends.map((trend) => trend.title).toList();
   }

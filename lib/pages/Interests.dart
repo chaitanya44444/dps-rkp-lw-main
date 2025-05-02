@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lw/pages/signup.dart';
 import 'package:lw/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -38,6 +37,22 @@ class _InterestInputChipsState extends State<InterestInputChips> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant InterestInputChips oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialInterests.length != oldWidget.initialInterests.length ||
+        !widget.initialInterests.every((item) => oldWidget.initialInterests.contains(item))) {
+      bool userMadeChanges = _interests.length != oldWidget.initialInterests.length ||
+          !_interests.every((item) => oldWidget.initialInterests.contains(item));
+      if (!userMadeChanges) {
+        setState(() {
+          _interests.clear();
+          _interests.addAll(widget.initialInterests);
+        });
+      }
+    }
+  }
+
   void _onTextChanged() {
     final text = _textEditingController.text;
     if (text.isNotEmpty && text.endsWith(' ')) {
@@ -47,8 +62,13 @@ class _InterestInputChipsState extends State<InterestInputChips> {
           _interests.add(word);
           widget.onInterestsChanged?.call(_interests);
         });
+        _textEditingController.clear();
+      } else {
+        _textEditingController.text = word;
+        _textEditingController.selection = TextSelection.fromPosition(
+          TextPosition(offset: _textEditingController.text.length),
+        );
       }
-      _textEditingController.clear();
     }
   }
 
@@ -96,8 +116,8 @@ class _InterestInputChipsState extends State<InterestInputChips> {
                 _interests.add(word);
                 widget.onInterestsChanged?.call(_interests);
               });
+              _textEditingController.clear();
             }
-            _textEditingController.clear();
           },
         ),
       ],
@@ -108,23 +128,27 @@ class _InterestInputChipsState extends State<InterestInputChips> {
 class Interests extends StatefulWidget {
   const Interests({Key? key}) : super(key: key);
 
-
   @override
   _InterestsState createState() => _InterestsState();
 }
 
 class _InterestsState extends State<Interests> {
-  List<String> _userInterests = ["crypto-mining"];
-
+  List<String> _userInterests = [];
   String? _username;
-
   final FirebaseAuth auth = FirebaseAuth.instance;
   final AuthenticationService _authService = AuthenticationService(FirebaseAuth.instance);
 
-  void _submit(String? username, List<String> interests) async{
-    _authService.addUserToDB(auth.currentUser!.uid, username.toString(), auth.currentUser!.email.toString(), DateTime.now(), interests);
-
-    Navigator.pushNamed(context, "/landingscreen");
+  void _submit(String? username, List<String> interests) async {
+    if (auth.currentUser != null && username != null) {
+      _authService.addUserToDB(
+        auth.currentUser!.uid,
+        username,
+        auth.currentUser!.email.toString(),
+        DateTime.now(),
+        interests,
+      );
+      Navigator.pushNamed(context, "/landingscreen");
+    }
   }
 
   @override
@@ -132,25 +156,44 @@ class _InterestsState extends State<Interests> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = ModalRoute.of(context)?.settings.arguments;
-
-      if (args != null && args is String) {
+      List<String> interestsFromArgs = [];
+      String? usernameFromArgs;
+      if (args != null && args is List<dynamic> && args.length >= 2) {
+        final dynamic usernameArg = args[0];
+        final dynamic interestsArg = args[1];
+        if (usernameArg is String) {
+          usernameFromArgs = usernameArg;
+        }
+        if (interestsArg is List<String>) {
+          interestsFromArgs = interestsArg;
+        } else if (interestsArg is List<dynamic>) {
+          try {
+            interestsFromArgs = List<String>.from(interestsArg);
+          } catch (e) {}
+        }
         setState(() {
-          _username = args;
+          _username = usernameFromArgs ?? 'user';
+          _userInterests = interestsFromArgs;
         });
       } else {
-         print('No String data received or data is of wrong type.');
-         setState(() {
-           _username = 'user';
-         });
+        setState(() {
+          _username = 'user';
+          _userInterests = [];
+        });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enter Your Interests'),
+        title: const Text('Select Your Interests'),
         backgroundColor: Colors.blueAccent,
         automaticallyImplyLeading: false,
       ),
@@ -161,41 +204,39 @@ class _InterestsState extends State<Interests> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                const Text(
                   'Your Interests:',
                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 InterestInputChips(
-                  initialInterests: ['crypto-mining'],
+                  initialInterests: _userInterests,
                   onInterestsChanged: (interests) {
                     setState(() {
                       _userInterests = interests;
                     });
-                    print('Current interests: $_userInterests');
                   },
                 ),
-                SizedBox(height: 20.0),
-                Text('Saved Interests: ${_userInterests.join(', ')}'),
+                const SizedBox(height: 20.0),
+                Text('Current Interests: ${_userInterests.join(', ')}'),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 ElevatedButton(
                   onPressed: () => _submit(_username, _userInterests),
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
-            )
-
+            ),
           ],
-
         ),
       ),
-
     );
-
   }
 }

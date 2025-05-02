@@ -10,8 +10,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  User? _user;
-
   bool _obscureText = true;
   bool _isSubmitting = false;
   bool gContinue = false;
@@ -53,7 +51,7 @@ class _SignUpState extends State<SignUp> {
 
     if (logMessage == "Signed Up") {
       if (mounted) {
-        Navigator.pushNamed(context, "/interests", arguments: _username);
+        Navigator.pushNamed(context, "/interests", arguments: [_username, []]);
       }
     } else {
       setState(() {
@@ -94,24 +92,13 @@ class _SignUpState extends State<SignUp> {
   //     _showErrorSnack(logMessage);
   //   }
   // }
-
-  @override
-  void initState() {
-    super.initState();
-    auth.authStateChanges().listen((event) {
-      setState(() {
-        _user = event;
-      });
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text("Register"),
-        backgroundColor: Colors.blue,
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -122,7 +109,7 @@ class _SignUpState extends State<SignUp> {
               children: [
                 Text(
                   "Register",
-                  style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.purple, fontSize: 60, fontWeight: FontWeight.bold),
                 ),
                 Form(
                   key: _formKey,

@@ -4,7 +4,7 @@ class UserModel {
   String email;
   String uid;
   String username;
-  List<String> interests;
+  List interests;
   DateTime timestamp;
 
   UserModel(
@@ -20,7 +20,7 @@ class UserModel {
           username: json["username"] as String,
           email: json["email"] as String,
           timestamp: (json["timestamp"] as Timestamp).toDate(),
-          interests: json["interests"] as List<String>
+          interests: json["interests"] as List
         );
 
   Map<String, Object?> toJson() {
